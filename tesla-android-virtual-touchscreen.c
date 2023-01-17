@@ -18,6 +18,7 @@ void webSocketOnConnectionClosed(ws_cli_conn_t *client) {
 
 void webSocketOnMessage(__attribute__ ((unused)) ws_cli_conn_t *client,
        const unsigned char *msg, __attribute__ ((unused)) uint64_t size, __attribute__ ((unused)) int type) {
+  ws_ping(NULL, 30);
   FILE *fp;
   fp = fopen("/dev/virtual_touchscreen", "w+");
   fputs((const char*) msg, fp);
