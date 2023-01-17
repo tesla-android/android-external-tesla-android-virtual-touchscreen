@@ -1,0 +1,22 @@
+cc_binary {
+    name: "tesla-android-virtual-touchscreen",
+
+    srcs: ["tesla-android-virtual-touchscreen.c"],
+
+    shared_libs: [
+        "libws",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-O2",
+        "-std=c99",
+        "-pthread",
+        "-pedantic"
+    ],
+
+    include_dirs: [
+        "external/libws",
+     ],
+}
