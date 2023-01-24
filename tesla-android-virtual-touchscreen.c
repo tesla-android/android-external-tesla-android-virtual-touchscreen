@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <ws.h>
 
+int pingFrameCounter = 0;
+
 void webSocketOnConnectionOpened(ws_cli_conn_t *client) {
   char *cli;
   cli = ws_getaddress(client);
@@ -18,11 +20,16 @@ void webSocketOnConnectionClosed(ws_cli_conn_t *client) {
 
 void webSocketOnMessage(__attribute__ ((unused)) ws_cli_conn_t *client,
        const unsigned char *msg, __attribute__ ((unused)) uint64_t size, __attribute__ ((unused)) int type) {
-  ws_ping(NULL, 30);
   FILE *fp;
   fp = fopen("/dev/virtual_touchscreen", "w+");
   fputs((const char*) msg, fp);
   fclose(fp);
+  if(pingFrameCounter == 150) {
+    ws_ping(NULL, 5);
+  } else {
+    pingFrameCounter = 0;
+  }
+  pingFrameCounter++;
 }
 
 int main(void)
