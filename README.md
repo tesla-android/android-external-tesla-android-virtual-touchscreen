@@ -1,5 +1,5 @@
-# android-external-tesla-android-virtual-display
+# android-external-tesla-android-virtual-touchscreen
 
 #### Please consider supporting the project: 
 
-[Donations](https://tesla-android.gapinski.eu/donations)
+[Donations](https://teslaandroid.com/donations)
