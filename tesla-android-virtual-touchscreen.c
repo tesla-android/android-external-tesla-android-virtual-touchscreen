@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <ws.h>
-
-int pingFrameCounter = 0;
 
 void webSocketOnConnectionOpened(ws_cli_conn_t *client) {
   char *cli;
@@ -24,20 +23,28 @@ void webSocketOnMessage(__attribute__ ((unused)) ws_cli_conn_t *client,
   fp = fopen("/dev/virtual_touchscreen", "w+");
   fputs((const char*) msg, fp);
   fclose(fp);
-  if(pingFrameCounter == 150) {
+}
+
+void *pingThread(__attribute__ ((unused)) void *arg) {
+  while(1) {
+    sleep(1);
     ws_ping(NULL, 5);
-  } else {
-    pingFrameCounter = 0;
   }
-  pingFrameCounter++;
+  return NULL;
 }
 
 int main(void)
 {
+  pthread_t ping_thread;
+  pthread_create(&ping_thread, NULL, pingThread, NULL);
+
   struct ws_events evs;
   evs.onopen    = &webSocketOnConnectionOpened;
   evs.onclose   = &webSocketOnConnectionClosed;
   evs.onmessage = &webSocketOnMessage;
   ws_socket(&evs, 9999, 0, 1000);
+
+  pthread_join(ping_thread, NULL);
+
   return (0);
 }
